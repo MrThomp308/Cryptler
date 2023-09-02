@@ -4,6 +4,8 @@ const misKeys = ['submitBtn', 'backBtn'];
 const rightArrow = '&#9654;';
 const leftArrow = '&#9664;';
 
+startTime = new Date();
+
 activeRow = 0;
 activeColumn = 0;
 var rows = [];
@@ -14,6 +16,7 @@ answers = {};
 
 
 function main() {
+    //createNotification('cool :)');
     setWord(scrambleWord(getWordFromList()));
     setDefinition(definition);
     console.log(word);
@@ -465,17 +468,47 @@ function scrambleWord(word) {
     return newWord;
 }
 
+function formatTime(milliseconds) {
+    // Convert milliseconds to seconds
+    const seconds = Math.floor(milliseconds / 1000);
+    
+    // Calculate hours, minutes, and remaining seconds
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+  
+    // Format the time components to have two digits (e.g., 01 instead of 1)
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+  
+    // Return the formatted time as a string
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  }
+
 function createNotification(message = null, type = null) {
-    timeout = 3 * 1000;
+    endTime = new Date();
+    timeElapsed = formatTime(endTime - startTime);
+    //timeout = 3 * 1000;
 
     const notif = document.createElement('div');
+    const notifResult = document.createElement('div');
+    const notifDetails = document.createElement('div');
+
+    notifResult.textContent = message;
+    notifDetails.innerHTML = `<br>Statistics:<br>${timeElapsed}`;
+
     notif.classList.add('toast');
     notif.classList.add('toastTranslate');
-    notif.innerText = message;
+
+    notifResult.classList.add('toastHeader');
+
+    notif.appendChild(notifResult);
+    notif.appendChild(notifDetails);
     toasts.appendChild(notif);
-    setTimeout(() => {
-        notif.remove();
-    }, timeout);
+    //setTimeout(() => {
+    //    notif.remove();
+    //}, timeout);
 }
 
 main();
