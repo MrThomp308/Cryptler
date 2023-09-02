@@ -1,6 +1,8 @@
 const numKeys = ['0Btn', '1Btn', '2Btn', '3Btn', '4Btn', '5Btn'];
 const dirKeys = ['upBtn', 'downBtn'];
 const misKeys = ['submitBtn', 'backBtn'];
+const rightArrow = '&#9654;';
+const leftArrow = '&#9664;';
 
 activeRow = 0;
 activeColumn = 0;
@@ -166,8 +168,8 @@ function keyPress(arg1) {
                 getActiveCell().textContent.trim().length < 2 &&
                 getActiveCell().textContent.trim() != '0') {
                 console.log(`direction: ${arg1}`);
-                if (arg1 == 'up') { sendToActiveCell('▲'); }
-                else if (arg1 == 'down') { sendToActiveCell('▼'); }
+                if (arg1 == 'up') { sendToActiveCell('▶'); }
+                else if (arg1 == 'down') { sendToActiveCell('◀'); }
 
                 if (activeColumn == 4) {
                     deactivateKeyboard(numKeys);
@@ -272,11 +274,11 @@ function checkTile(tile, i) {
     }
     else if (tileContent.length > 1) {
         var directionMatch = false;
-        if (tileContent[1] == '▲' &&
+        if (tileContent[1] == '▶' &&
             answers[`column ${i}`]['direction'] == 'up') {
             directionMatch = true;
         }
-        else if (tileContent[1] == '▼' &&
+        else if (tileContent[1] == '◀' &&
             answers[`column ${i}`]['direction'] == 'down') {
             directionMatch = true;
         }
@@ -373,7 +375,25 @@ const submit = async () => {
         keyList = numKeys.concat(dirKeys).concat(misKeys);
         deactivateKeyboard(keyList);
 
-        createNotification('Great!', type = 'win');
+        switch (activeRow) {
+            case 0:
+                createNotification('Excellent!', type = 'win');
+                break;
+            case 1:
+                createNotification('Great!', type = 'win');
+                break;
+            case 2:
+                createNotification('Good!', type = 'win');
+                break;
+            case 3:
+                createNotification('Nice!', type = 'win');
+                break;
+            case 4:
+                createNotification('Good Job!', type = 'win');
+                break;
+            default:
+                break;
+        }
     }
 
     rowWord = document.getElementsByClassName('rowWordModule')[0];
