@@ -36,7 +36,7 @@ function setDefinition(nDef) {
 }
 
 function setWord(nWord) {
-    wordTiles = document.getElementsByClassName(`wordTileModule`)
+    wordTiles = document.getElementsByClassName(`wordTileModule`);
 
     if (nWord.length == wordTiles.length) {
         for (let i = 0; i < nWord.length; i++) {
