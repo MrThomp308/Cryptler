@@ -298,13 +298,18 @@ function checkTile(tile, i) {
     answerNum = parseInt(answers[`column ${ i }`]['number']);
     answerLtr = answers[`column ${ i }`]['letter'];
 
+    ltrMod = document.createElement('div');
+    ltrMod.classList = 'tileLtrModule';
+
     subContainer = document.createElement('div');
     subContainer.classList = 'tileSubContainerModule';
-    subMod = document.createElement('div')
-    subMod.classList = 'tileSubModule';
-    subMod.textContent = tileContent;
+    subModLeft = document.createElement('div')
+    subModLeft.classList = 'tileSubModuleLeft';
+    subModRight = document.createElement('div')
+    subModRight.classList = 'tileSubModuleRight';
 
-    subContainer.appendChild(subMod);
+    subContainer.appendChild(subModLeft);
+    subContainer.appendChild(subModRight);
 
     correct = true;
 
@@ -345,7 +350,15 @@ function checkTile(tile, i) {
     }
 
     tile.textContent = letterFromIndexOfAnswer(tileContent, answerLtr, i);
-    tile.appendChild(subContainer);
+    //ltrMod.textContent = letterFromIndexOfAnswer(tileContent, answerLtr, i);
+    if(tileContent != '0') {
+        subModLeft.textContent = tileContent[0];
+        subModRight.textContent = tileContent[1];
+
+        //tile.appendChild(ltrMod);
+        tile.appendChild(subContainer);
+    }
+    
     return correct;
 }
 
