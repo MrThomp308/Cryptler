@@ -1,8 +1,8 @@
 const numKeys = ['0Btn', '1Btn', '2Btn', '3Btn', '4Btn', '5Btn'];
 const dirKeys = ['upBtn', 'downBtn'];
 const misKeys = ['submitBtn', 'backBtn'];
-const rightArrow = '&#9654;';
-const leftArrow = '&#9664;';
+const rightArrow = '▶';
+const leftArrow = '◀';
 
 startTime = new Date();
 
@@ -14,7 +14,6 @@ definition = "";
 scrambledWord = "";
 answers = {};
 hintRevealed = false;
-
 
 function main() {
     //createNotification('cool :)');
@@ -138,11 +137,11 @@ function shiftRow() {
 }
 
 function keyPress(arg1) {
-    if (document.getElementById(`${arg1}Btn`).active == 'false') { return; }
+    if (document.getElementById(`${ arg1 }Btn`).active == 'false') { return; }
     switch (arg1.toString()) {
         case '0':
             if (getActiveCell().textContent.trim().length < 1) {
-                console.log(`number: ${arg1}`);
+                console.log(`number: ${ arg1 }`);
                 sendToActiveCell(arg1);
 
                 if (activeColumn == 4) {
@@ -260,25 +259,33 @@ function findDiff(num1, num2) {
     return diff;
 }
 
-function letterFromIndexOfAnswer(text, answerIndex) {
+function letterFromIndexOfAnswer(text, answerLtr, currentIndex) {
     alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    answerNum = alphabet.toUpperCase().indexOf(answerLtr.toString().toUpperCase());
+    console.log(`${ answerLtr }: ${ answerNum }`);
 
-    if(text.length == 1) {
-        return alphabet[tileNum = (answerNum + parseInt(text))];
+    indexNum = alphabet.toUpperCase().indexOf(scrambledWord.toUpperCase()[currentIndex]);
+    console.log(`sWord: ${scrambledWord}`);
+    console.log(`${scrambledWord[currentIndex]} -> ${indexNum}`);
+
+    if (text.length == 1) {
+        return alphabet[indexNum];
     }
     else {
-        textNum = (answerNum + parseInt(text[0]));
+        textNum = indexNum + parseInt(text[0]);
+        console.log(`TN: ${textNum}`);
         textDir = text[1];
 
         //Right
-        if(textDir == '▶') {
+        if (textDir == '▶') {
             newIndex = (textNum % alphabet.length);
             console.log(newIndex);
             return alphabet[newIndex];
         }
         //Left
-        else if(textDir == '◀') {
-            newIndex = ((alphabet.length - 1) - (textNum % alphabet.length));
+        else if (textDir == '◀') {
+            console.log(`((${indexNum} + ${parseInt(text[0])}) - (2 * ${parseInt(text[0])}) + ${alphabet.length}) % ${alphabet.length}`);
+            newIndex = ((indexNum + parseInt(text[0])) - (2 * parseInt(text[0])) + alphabet.length) % alphabet.length;
             console.log(newIndex);
             return alphabet[newIndex];
         }
@@ -288,7 +295,8 @@ function letterFromIndexOfAnswer(text, answerIndex) {
 function checkTile(tile, i) {
     tileContent = tile.textContent.trim();
     tileNum = parseInt(tileContent[0]);
-    answerNum = parseInt(answers[`column ${i}`]['number']);
+    answerNum = parseInt(answers[`column ${ i }`]['number']);
+    answerLtr = answers[`column ${ i }`]['letter'];
 
     subContainer = document.createElement('div');
     subContainer.classList = 'tileSubContainerModule';
@@ -330,20 +338,20 @@ function checkTile(tile, i) {
                 markCorrect(tile, i);
             }
             else {
-                markWrong(tile, tileNum, answerNum);
+                markWrong(tile, tileNum, answerNum, i);
                 correct = false;
             }
         }
     }
 
-    tile.textContent = letterFromIndexOfAnswer(tileContent, answerNum);
+    tile.textContent = letterFromIndexOfAnswer(tileContent, answerLtr, i);
     tile.appendChild(subContainer);
     return correct;
 }
 
 function changeTileColors() {
     //--gray-3 && --gray-4
-    rowElems = Array.from(document.getElementsByClassName(`rowModule`));
+    rowElems = Array.from(document.getElementsByClassName('rowModule'));
 
     var i = 0;
     rowElems.forEach((row) => {
@@ -381,11 +389,11 @@ function activateKeyboard(keyList) {
 }
 
 const submit = async () => {
-    console.log(`Active Row: ${activeRow}`);
+    console.log(`Active Row: ${ activeRow }`);
     console.log(answers);
-    currentRowElems = document.getElementsByClassName(`rowModule`);
+    currentRowElems = document.getElementsByClassName('rowModule');
     currentRowElem = currentRowElems[activeRow];
-    currentRowTiles = Array.from(currentRowElem.getElementsByClassName(`tileModule`));
+    currentRowTiles = Array.from(currentRowElem.getElementsByClassName('tileModule'));
 
     currentRowElem.classList.add('tileModuleRotationShort');
     allCorrect = true;
@@ -457,72 +465,73 @@ function scrambleWord(word) {
         var numInt = numList[Math.floor(Math.random() * numList.length)];
         var directionNum = 0;
         if (numInt == 0) {
-            answers[`column ${i}`] = { 'letter': word[i], 'direction': 'none', 'number': numInt };
+            answers[`column ${ i }`] = { 'letter': word[i], 'direction': 'none', 'number': numInt };
             directionNum = numInt;
         }
         //Directions are reversed, so 0 == down instead of up
         else if (dirInt == 0) {
-            answers[`column ${i}`] = { 'letter': word[i], 'direction': 'down', 'number': numInt };
+            answers[`column ${ i }`] = { 'letter': word[i], 'direction': 'down', 'number': numInt };
             directionNum = numInt * 1;
         }
         else {
-            answers[`column ${i}`] = { 'letter': word[i], 'direction': 'up', 'number': numInt };
+            answers[`column ${ i }`] = { 'letter': word[i], 'direction': 'up', 'number': numInt };
             directionNum = numInt * -1;
         }
-        console.log(`${answers[`column ${i}`]['letter']} -> ${answers[`column ${i}`]['direction']} -> ${answers[`column ${i}`]['number']}`);
-        var newLetter = "";
-        try {
-            var letter = word[i];
-            ogLetterIndex = letterList.indexOf(letter.toLowerCase());
-            newLetterIndex = ogLetterIndex + directionNum;
-            if (newLetterIndex > letterList.length - 1 || newLetterIndex < 0) {
-                console.error(`**Out of Range**`);
-                console.error(`LetterList: ${letterList.length - 1}`);
-                console.error(`OG Letter Idx: ${ogLetterIndex}`);
-                console.error(`New Letter Idx: ${newLetterIndex}`);
+        console.log(`${ answers[`column ${ i }`]['letter']} -> ${ answers[`column ${ i }`]['direction'] } -> ${ answers[`column ${ i }`]['number'] }`);
+    var newLetter = "";
+    try {
+        var letter = word[i];
+        ogLetterIndex = letterList.indexOf(letter.toLowerCase());
+        newLetterIndex = ogLetterIndex + directionNum;
+        if (newLetterIndex > letterList.length - 1 || newLetterIndex < 0) {
+            console.error('** Out of Range **');
+            console.error(`LetterList: ${ letterList.length - 1 }`);
+            console.error(`OG Letter Idx: ${ ogLetterIndex }`);
+            console.error(`New Letter Idx: ${ newLetterIndex }`);
 
-                if (newLetterIndex < 0) {
-                    newLetterIndex = letterList.length + newLetterIndex;
-                }
-                else {
-                    newLetterIndex = newLetterIndex - letterList.length;
-                }
-
-                console.error(`Updated Letter Idx: ${newLetterIndex}`);
-
+            if (newLetterIndex < 0) {
+                newLetterIndex = letterList.length + newLetterIndex;
             }
             else {
-                console.log(`In Range`);
+                newLetterIndex = newLetterIndex - letterList.length;
             }
-            newLetter = letterList[newLetterIndex];
-            newWord = newWord + newLetter;
-        }
-        catch (error) {
-            console.error(error);
-        }
 
+            console.error(`Updated Letter Idx: ${newLetterIndex}`);
+
+        }
+        else {
+            console.log(`In Range`);
+        }
+        newLetter = letterList[newLetterIndex];
+        newWord = newWord + newLetter;
+    }
+    catch (error) {
+        console.error(error);
     }
 
-    return newWord;
+}
+
+scrambledWord = newWord;
+return newWord;
 }
 
 function formatTime(milliseconds) {
     // Convert milliseconds to seconds
     const seconds = Math.floor(milliseconds / 1000);
-    
+
     // Calculate hours, minutes, and remaining seconds
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
-  
+
     // Format the time components to have two digits (e.g., 01 instead of 1)
     const formattedHours = String(hours).padStart(2, '0');
     const formattedMinutes = String(minutes).padStart(2, '0');
     const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-  
+
     // Return the formatted time as a string
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-  }
+}
 
 function createNotification(message = null, type = null) {
     endTime = new Date();
@@ -535,9 +544,9 @@ function createNotification(message = null, type = null) {
 
     notifResult.textContent = message;
     notifDetails.innerHTML = `  <br>Statistics:
-                                <br>${timeElapsed}
-                                <br><br>Attempts: ${activeRow + 1}
-                                <br><br>Hint?: ${boolToYes(hintRevealed)}`;
+                            <br>${timeElapsed}
+                            <br><br>Attempts: ${activeRow + 1}
+                            <br><br>Hint?: ${boolToYes(hintRevealed)}`;
 
     notif.classList.add('toast');
     notif.classList.add('toastTranslate');
@@ -553,8 +562,8 @@ function createNotification(message = null, type = null) {
 }
 
 function boolToYes(arg1) {
-    if(arg1) {return 'yes';}
-    else {return 'no';}
+    if (arg1) { return 'yes'; }
+    else { return 'no'; }
 }
 
 function revealHint() {
