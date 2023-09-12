@@ -13,6 +13,7 @@ word = "";
 definition = "";
 scrambledWord = "";
 answers = {};
+hintRevealed = false;
 
 
 function main() {
@@ -31,8 +32,8 @@ function main() {
 }
 
 function setDefinition(nDef) {
-    defModule = document.getElementsByClassName(`definitionModule`)
-    defModule[0].textContent = nDef;
+    defModule = document.getElementsByClassName(`definitionModule`)[0];
+    defModule.addEventListener('click', revealHint);
 }
 
 function setWord(nWord) {
@@ -259,10 +260,44 @@ function findDiff(num1, num2) {
     return diff;
 }
 
+function letterFromIndexOfAnswer(text, answerIndex) {
+    alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+    if(text.length == 1) {
+        return alphabet[tileNum = (answerNum + parseInt(text))];
+    }
+    else {
+        textNum = (answerNum + parseInt(text[0]));
+        textDir = text[1];
+
+        //Right
+        if(textDir == '▶') {
+            newIndex = (textNum % alphabet.length);
+            console.log(newIndex);
+            return alphabet[newIndex];
+        }
+        //Left
+        else if(textDir == '◀') {
+            newIndex = ((alphabet.length - 1) - (textNum % alphabet.length));
+            console.log(newIndex);
+            return alphabet[newIndex];
+        }
+    }
+}
+
 function checkTile(tile, i) {
     tileContent = tile.textContent.trim();
     tileNum = parseInt(tileContent[0]);
     answerNum = parseInt(answers[`column ${i}`]['number']);
+
+    subContainer = document.createElement('div');
+    subContainer.classList = 'tileSubContainerModule';
+    subMod = document.createElement('div')
+    subMod.classList = 'tileSubModule';
+    subMod.textContent = tileContent;
+
+    subContainer.appendChild(subMod);
+
     correct = true;
 
     if (tileContent.length == 1) {
@@ -300,6 +335,9 @@ function checkTile(tile, i) {
             }
         }
     }
+
+    tile.textContent = letterFromIndexOfAnswer(tileContent, answerNum);
+    tile.appendChild(subContainer);
     return correct;
 }
 
@@ -496,7 +534,10 @@ function createNotification(message = null, type = null) {
     const notifDetails = document.createElement('div');
 
     notifResult.textContent = message;
-    notifDetails.innerHTML = `<br>Statistics:<br>${timeElapsed}`;
+    notifDetails.innerHTML = `  <br>Statistics:
+                                <br>${timeElapsed}
+                                <br><br>Attempts: ${activeRow + 1}
+                                <br><br>Hint?: ${boolToYes(hintRevealed)}`;
 
     notif.classList.add('toast');
     notif.classList.add('toastTranslate');
@@ -509,6 +550,18 @@ function createNotification(message = null, type = null) {
     //setTimeout(() => {
     //    notif.remove();
     //}, timeout);
+}
+
+function boolToYes(arg1) {
+    if(arg1) {return 'yes';}
+    else {return 'no';}
+}
+
+function revealHint() {
+    console.log('hint revealed');
+    revealElem = document.getElementsByClassName('definitionModule')[0];
+    revealElem.innerHTML = definition;
+    hintRevealed = true;
 }
 
 main();

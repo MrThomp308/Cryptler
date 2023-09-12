@@ -22,6 +22,19 @@
       --color-tone-10: #000000;
       --color-tone-11: #787c7e;
       --color-tone-12: #363636;
+      --color-ref-primary0: #000000ff;
+      --color-ref-primary10: #28094aff;
+      --color-ref-primary20: #3e2260ff;
+      --color-ref-primary25: #492d6cff;
+      --color-ref-primary30: #553978ff;
+      --color-ref-primary40: #6e5192ff;
+      --color-ref-primary50: #876aacff;
+      --color-ref-primary60: #a283c8ff;
+      --color-ref-primary70: #bd9de4ff;
+      --color-ref-primary80: #d9b9ffff;
+      --color-ref-primary90: #eedbffff;
+      --color-ref-primary95: #f8edffff;
+      --color-ref-primary99: #fffbffff;
       --color-nav-hover: #f4f4f4;
       --opacity-50: rgba(255, 255, 255, 0.5);
       --error-background: #e3e3e1;
@@ -87,6 +100,10 @@
       --row-mod-0: #FFFFFD;
       --row-mod-1: #F9F9F9;
     }
+
+    /*body {
+      background-color: var(--color-ref-primary60);
+    }*/
 
     .gameModule {
       width: 100%;
@@ -157,7 +174,7 @@
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      font-size: 1.75rem;
       line-height: 1;
       font-weight: bold;
       vertical-align: middle;
@@ -175,6 +192,20 @@
     .tileModuleRotationLong {
       animation-name: rotate;
       animation-duration: 0.7s;
+    }
+
+    .tileSubContainerModule {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      z-index: 998;
+      position: fixed;
+    }
+
+    .tileSubModule {
+      font-size: .3em;
+      grid-column-start: 3;
+      display: flex;
     }
 
     .keyboardContainerModule {
@@ -285,7 +316,7 @@
     }
 
     .toast {
-      transform: translateY(calc(100% + var(--keyboard-height)));
+      transform: translateY(calc(30% + var(--keyboard-height)));
       margin: auto;
       width: 50%;
       padding: 10px;
@@ -307,6 +338,7 @@
       animation-name: translate;
       animation-duration: 0.5s;
     }
+
     .toastHeader {
       text-align: center;
     }
@@ -346,43 +378,43 @@
       }
 
       10% {
-        transform: translateY(calc(10% + var(--keyboard-height)));
+        transform: translateY(calc(3% + var(--keyboard-height)));
       }
 
       20% {
-        transform: translateY(calc(20% + var(--keyboard-height)));
+        transform: translateY(calc(6% + var(--keyboard-height)));
       }
 
       30% {
-        transform: translateY(calc(30% + var(--keyboard-height)));
+        transform: translateY(calc(9% + var(--keyboard-height)));
       }
 
       40% {
-        transform: translateY(calc(40% + var(--keyboard-height)));
+        transform: translateY(calc(12% + var(--keyboard-height)));
       }
 
       50% {
-        transform: translateY(calc(50% + var(--keyboard-height)));
+        transform: translateY(calc(15% + var(--keyboard-height)));
       }
 
       60% {
-        transform: translateY(calc(60% + var(--keyboard-height)));
+        transform: translateY(calc(18% + var(--keyboard-height)));
       }
 
       70% {
-        transform: translateY(calc(70% + var(--keyboard-height)));
+        transform: translateY(calc(21% + var(--keyboard-height)));
       }
 
       80% {
-        transform: translateY(calc(80% + var(--keyboard-height)));
+        transform: translateY(calc(24% + var(--keyboard-height)));
       }
 
       90% {
-        transform: translateY(calc(90% + var(--keyboard-height)));
+        transform: translateY(calc(27% + var(--keyboard-height)));
       }
 
       100% {
-        transform: translateY(calc(100% + var(--keyboard-height)));
+        transform: translateY(calc(30% + var(--keyboard-height)));
       }
     }
   </style>
@@ -408,7 +440,7 @@
           </div>
         </div>
 
-        <div class="definitionModule"></div>
+        <div class="definitionModule">reveal hint</div>
 
         <div class="rowModule" id="row 1">
           <div class="tileModule" id="tile 1">
