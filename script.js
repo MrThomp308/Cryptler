@@ -549,34 +549,34 @@ function formatTime(milliseconds) {
 }
 
 function createNotification(message = null, type = null) {
+    revealHint();
+
     endTime = new Date();
     timeElapsed = formatTime(endTime - startTime);
 
-    hintMsg = 'No Hint';
-    if (!boolToYes(hintRevealed)) {
-        hintMsg = 'Hint Used';
-    }
+    const results = document.createElement('div');
+    const resultsHeader = document.createElement('div');
+    const resultsSubHeader = document.createElement('div');
+    const resultsDetails = document.createElement('div');
 
-    const notif = document.createElement('div');
-    const notifResult = document.createElement('div');
-    const notifDetails = document.createElement('div');
+    resultsHeader.innerHTML = `<span style="text-decoration: overline;">${message}</span><br><span style="display: flex; justify-content: center; font-size: 1rem; text-decoration: underline;">${timeElapsed}</span>`;
+    resultsSubHeader.innerHTML = `<br>Statistics:`;
+    resultsDetails.innerHTML = `Attempts | ${activeRow + 1}
+                                <br>Hint Revealed | ${boolToYes(hintRevealed)}`;
 
-    notifResult.textContent = message;
-    notifDetails.innerHTML = `  <br><span style="display: flex; justify-content: center; font-size: 1rem; text-decoration: underline overline;">${timeElapsed}</span>
-                            <br><span text-decoration: underline;>Statistics</span>:
-                            <br><br>Attempts: ${activeRow + 1}
-                            <br><br>${hintMsg}`;
+    results.classList.add('toast');
+    results.classList.add('toastTranslate');
 
-    notif.classList.add('toast');
-    notif.classList.add('toastTranslate');
+    resultsHeader.classList.add('toastHeader');
+    resultsSubHeader.classList.add('toastSubHeader');
+    resultsDetails.classList.add('toastText');
 
-    notifResult.classList.add('toastHeader');
-
-    notif.appendChild(notifResult);
-    notif.appendChild(notifDetails);
-    toasts.appendChild(notif);
+    results.appendChild(resultsHeader);
+    results.appendChild(resultsSubHeader);
+    results.appendChild(resultsDetails);
+    toasts.appendChild(results);
     //setTimeout(() => {
-    //    notif.remove();
+    //    results.remove();
     //}, timeout);
 }
 

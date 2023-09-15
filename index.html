@@ -340,13 +340,17 @@
       border-radius: 4px;
       border: 2px solid;
       border-color: var(--gray);
-      font-size: 1rem;
-      font-weight: bold;
-      vertical-align: middle;
       box-sizing: border-box;
-      text-transform: uppercase;
       user-select: none;
       opacity: 100%;
+    }
+
+    .toastHeader {
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      font-weight: bold;
+      vertical-align: middle;
+      text-align: center;
     }
 
     .toastTranslate {
@@ -354,8 +358,18 @@
       animation-duration: 0.5s;
     }
 
-    .toastHeader {
-      text-align: center;
+    .toastSubHeader {
+      text-transform: uppercase;
+      font-size: .825rem;
+      font-weight: bold;
+      text-align: left;
+      text-decoration: underline;
+    }
+
+    .toastText {
+      font-size: .75rem;
+      font-weight: bold;
+      text-align: left;
     }
 
     #toasts {
