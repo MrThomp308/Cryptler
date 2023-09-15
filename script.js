@@ -16,7 +16,7 @@ answers = {};
 hintRevealed = false;
 
 function main() {
-    //createNotification('cool :)');
+    createTutorial();
     setWord(scrambleWord(getWordFromList()));
     setDefinition(definition);
     console.log(word);
@@ -137,11 +137,11 @@ function shiftRow() {
 }
 
 function keyPress(arg1) {
-    if (document.getElementById(`${ arg1 }Btn`).active == 'false') { return; }
+    if (document.getElementById(`${arg1}Btn`).active == 'false') { return; }
     switch (arg1.toString()) {
         case '0':
             if (getActiveCell().textContent.trim().length < 1) {
-                console.log(`number: ${ arg1 }`);
+                console.log(`number: ${arg1}`);
                 sendToActiveCell(arg1);
 
                 if (activeColumn == 4) {
@@ -242,7 +242,8 @@ function markInCorrect(tile, tileNum, answerNum) {
     var diff = findDiff(tileNum, answerNum);
 
     tile.style.borderColor = "var(--darkendRed)";
-    tile.style.backgroundColor = `var(--red-${diff})`;
+    //tile.style.backgroundColor = `var(--red-${diff})`;
+    tile.style.backgroundColor = `var(--red-0)`;
     console.log(`Diff: ${diff}`);
 }
 
@@ -250,7 +251,8 @@ function markWrong(tile, tileNum, answerNum) {
     var diff = findDiff(tileNum, answerNum);
 
     tile.style.borderColor = "var(--darkendYellow)";
-    tile.style.backgroundColor = `var(--yellow-${diff})`;
+    //tile.style.backgroundColor = `var(--yellow-${diff})`;
+    tile.style.backgroundColor = `var(--yellow-0)`;
     console.log(`Diff: ${diff}`);
 }
 
@@ -262,7 +264,7 @@ function findDiff(num1, num2) {
 function letterFromIndexOfAnswer(text, answerLtr, currentIndex) {
     alphabet = 'abcdefghijklmnopqrstuvwxyz';
     answerNum = alphabet.toUpperCase().indexOf(answerLtr.toString().toUpperCase());
-    console.log(`${ answerLtr }: ${ answerNum }`);
+    console.log(`${answerLtr}: ${answerNum}`);
 
     indexNum = alphabet.toUpperCase().indexOf(scrambledWord.toUpperCase()[currentIndex]);
     console.log(`sWord: ${scrambledWord}`);
@@ -295,8 +297,8 @@ function letterFromIndexOfAnswer(text, answerLtr, currentIndex) {
 function checkTile(tile, i) {
     tileContent = tile.textContent.trim();
     tileNum = parseInt(tileContent[0]);
-    answerNum = parseInt(answers[`column ${ i }`]['number']);
-    answerLtr = answers[`column ${ i }`]['letter'];
+    answerNum = parseInt(answers[`column ${i}`]['number']);
+    answerLtr = answers[`column ${i}`]['letter'];
 
     ltrMod = document.createElement('div');
     ltrMod.classList = 'tileLtrModule';
@@ -351,14 +353,14 @@ function checkTile(tile, i) {
 
     tile.textContent = letterFromIndexOfAnswer(tileContent, answerLtr, i);
     //ltrMod.textContent = letterFromIndexOfAnswer(tileContent, answerLtr, i);
-    if(tileContent != '0') {
+    if (tileContent != '0') {
         subModLeft.textContent = tileContent[0];
         subModRight.textContent = tileContent[1];
 
         //tile.appendChild(ltrMod);
         tile.appendChild(subContainer);
     }
-    
+
     return correct;
 }
 
@@ -402,7 +404,7 @@ function activateKeyboard(keyList) {
 }
 
 const submit = async () => {
-    console.log(`Active Row: ${ activeRow }`);
+    console.log(`Active Row: ${activeRow}`);
     console.log(answers);
     currentRowElems = document.getElementsByClassName('rowModule');
     currentRowElem = currentRowElems[activeRow];
@@ -478,54 +480,54 @@ function scrambleWord(word) {
         var numInt = numList[Math.floor(Math.random() * numList.length)];
         var directionNum = 0;
         if (numInt == 0) {
-            answers[`column ${ i }`] = { 'letter': word[i], 'direction': 'none', 'number': numInt };
+            answers[`column ${i}`] = { 'letter': word[i], 'direction': 'none', 'number': numInt };
             directionNum = numInt;
         }
         //Directions are reversed, so 0 == down instead of up
         else if (dirInt == 0) {
-            answers[`column ${ i }`] = { 'letter': word[i], 'direction': 'down', 'number': numInt };
+            answers[`column ${i}`] = { 'letter': word[i], 'direction': 'down', 'number': numInt };
             directionNum = numInt * 1;
         }
         else {
-            answers[`column ${ i }`] = { 'letter': word[i], 'direction': 'up', 'number': numInt };
+            answers[`column ${i}`] = { 'letter': word[i], 'direction': 'up', 'number': numInt };
             directionNum = numInt * -1;
         }
-        console.log(`${ answers[`column ${ i }`]['letter']} -> ${ answers[`column ${ i }`]['direction'] } -> ${ answers[`column ${ i }`]['number'] }`);
-    var newLetter = "";
-    try {
-        var letter = word[i];
-        ogLetterIndex = letterList.indexOf(letter.toLowerCase());
-        newLetterIndex = ogLetterIndex + directionNum;
-        if (newLetterIndex > letterList.length - 1 || newLetterIndex < 0) {
-            console.error('** Out of Range **');
-            console.error(`LetterList: ${ letterList.length - 1 }`);
-            console.error(`OG Letter Idx: ${ ogLetterIndex }`);
-            console.error(`New Letter Idx: ${ newLetterIndex }`);
+        console.log(`${answers[`column ${i}`]['letter']} -> ${answers[`column ${i}`]['direction']} -> ${answers[`column ${i}`]['number']}`);
+        var newLetter = "";
+        try {
+            var letter = word[i];
+            ogLetterIndex = letterList.indexOf(letter.toLowerCase());
+            newLetterIndex = ogLetterIndex + directionNum;
+            if (newLetterIndex > letterList.length - 1 || newLetterIndex < 0) {
+                console.error('** Out of Range **');
+                console.error(`LetterList: ${letterList.length - 1}`);
+                console.error(`OG Letter Idx: ${ogLetterIndex}`);
+                console.error(`New Letter Idx: ${newLetterIndex}`);
 
-            if (newLetterIndex < 0) {
-                newLetterIndex = letterList.length + newLetterIndex;
+                if (newLetterIndex < 0) {
+                    newLetterIndex = letterList.length + newLetterIndex;
+                }
+                else {
+                    newLetterIndex = newLetterIndex - letterList.length;
+                }
+
+                console.error(`Updated Letter Idx: ${newLetterIndex}`);
+
             }
             else {
-                newLetterIndex = newLetterIndex - letterList.length;
+                console.log(`In Range`);
             }
-
-            console.error(`Updated Letter Idx: ${newLetterIndex}`);
-
+            newLetter = letterList[newLetterIndex];
+            newWord = newWord + newLetter;
         }
-        else {
-            console.log(`In Range`);
+        catch (error) {
+            console.error(error);
         }
-        newLetter = letterList[newLetterIndex];
-        newWord = newWord + newLetter;
-    }
-    catch (error) {
-        console.error(error);
+
     }
 
-}
-
-scrambledWord = newWord;
-return newWord;
+    scrambledWord = newWord;
+    return newWord;
 }
 
 function formatTime(milliseconds) {
@@ -549,17 +551,21 @@ function formatTime(milliseconds) {
 function createNotification(message = null, type = null) {
     endTime = new Date();
     timeElapsed = formatTime(endTime - startTime);
-    //timeout = 3 * 1000;
+
+    hintMsg = 'No Hint';
+    if (!boolToYes(hintRevealed)) {
+        hintMsg = 'Hint Used';
+    }
 
     const notif = document.createElement('div');
     const notifResult = document.createElement('div');
     const notifDetails = document.createElement('div');
 
     notifResult.textContent = message;
-    notifDetails.innerHTML = `  <br>Statistics:
-                            <br>${timeElapsed}
+    notifDetails.innerHTML = `  <br><span style="display: flex; justify-content: center; font-size: 1rem; text-decoration: underline overline;">${timeElapsed}</span>
+                            <br><span text-decoration: underline;>Statistics</span>:
                             <br><br>Attempts: ${activeRow + 1}
-                            <br><br>Hint?: ${boolToYes(hintRevealed)}`;
+                            <br><br>${hintMsg}`;
 
     notif.classList.add('toast');
     notif.classList.add('toastTranslate');
@@ -572,6 +578,46 @@ function createNotification(message = null, type = null) {
     //setTimeout(() => {
     //    notif.remove();
     //}, timeout);
+}
+
+function closeTutorial() {
+    console.log('Close Tutorial');
+    tutorialDiv = document.getElementById('tutorials');
+    tutorialDiv.style.visibility = 'hidden';
+}
+
+function createTutorial(message = null, type = null) {
+    const tutorial = document.createElement('div');
+    const tutorialHeader = document.createElement('div');
+    const tutorialSubHeader = document.createElement('div');
+    const tutorialHeaderSubText = document.createElement('div');
+    const tutorialText2 = document.createElement('div');
+    const closeBtn = document.createElement('div');
+
+    tutorialHeader.innerHTML = '<br>How To Play:';
+    tutorialHeaderSubText.textContent = 'Shift the scrambled letters left or right on the alphabet between 0-5 spaces.';
+    tutorialSubHeader.innerHTML = '<br>Colors Are Important:';
+    tutorialText2.innerHTML = `<span style="color: transparent;  text-shadow: 0 0 0 var(--green); font-size: 1rem;">&#x25FE;</span> | means you have the correct letter
+			    <br><span style="color: transparent;  text-shadow: 0 0 0 var(--yellow-0); font-size: 1rem;">&#x25FE;</span> | means you are going in the right direction
+			    <br><span style="color: transparent;  text-shadow: 0 0 0 var(--red-0); font-size: 1rem;">&#x25FE;</span> | means you are going in the wrong direction`;
+    closeBtn.innerHTML = '+'
+
+    tutorial.classList.add('tutorialToast');
+    tutorialHeader.classList.add('tutorialHeader');
+    tutorialSubHeader.classList.add('tutorialSubHeader');
+    tutorialHeaderSubText.classList.add('tutorialHeaderSubText');
+    tutorialText2.classList.add('tutorialText');
+    closeBtn.classList.add('closeBtn');
+
+    closeBtn.addEventListener('click', closeTutorial);
+
+    tutorial.appendChild(closeBtn);
+    tutorial.appendChild(tutorialHeader);
+    tutorial.appendChild(tutorialHeaderSubText);
+    tutorial.appendChild(tutorialSubHeader);
+    tutorial.appendChild(tutorialText2);
+
+    tutorials.appendChild(tutorial);
 }
 
 function boolToYes(arg1) {
